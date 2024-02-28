@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="../../../code-sample.css" rel="stylesheet" />
+<title>appvolumes-backup-tool</title>
+
+</head>
+<body
+><!--
+Retrieved from https://code.vmware.com/samples/7354/appvolumes-backup-tool
+--><div class="header"
+><p><a href="../..">EUC Digital Workspace developer portal</a></p
+><p>/ <a href="../">Contributor Code Samples</a> /</p
+></div
+
+><h1>appvolumes-backup-tool</h1
+><p class="github-download"
+    ><a href="https://github.com/chrisdhalstead/appvolumes-backup-tool">Download from GitHub</a>.</p
+><div class="section readme"> Tool to Backup VMware App Volumes AppStacks and Writable Volumes <br /> <div class="markdown-heading"> <a id="user-content-appvolumes-backup-tool" class="anchor-element external" aria-label="Permalink: appvolumes-backup-tool" href="https://github.com/chrisdhalstead/appvolumes-backup-tool/raw/master/README.md/#appvolumes-backup-tool" target="_blank" rel="noopener"><span aria-hidden="true" class="octicon octicon-link"></span></a> </div> <p>Utility to Backup VMware AppVolumes 2.x Chris Halstead @chrisdhalstead</p> <p><strong>This utility is provided as-is and there is no support</strong></p> <p>Instructions:</p> <ol> <li>Make sure the Microsoft .NET Framework and VMware PowerCLI are installed on the system that you will run the backup utility from.</li> <li>Launch the utility and type the HTTP URL into your App Volumes manager (Example: <a href="https://av-manager.company.com" rel="noopener" class=" external" target="_blank">https://av-manager.company.com</a>). You will be prompted to enter a username and password. The username should be a member of the App Volumes Administrators group. Note: The user MUST be in the App Volumes Administrators group in order to access the App Volumes API.</li> <li>Click &quot;Populate AppStacks&quot;. This will list all AppStacks and Writable Volumes on that App Volumes Manager. Note: You can right-click an AppStack and choose &quot;Show Installed Applications&quot; to see what applications are contained within that AppStack.</li> <li>Enter the URL for the Virtual Center that you would like to use for backing up App Volumes data. Example: <a href="https://vcenter.company.com" rel="noopener" class=" external" target="_blank">https://vcenter.company.com</a>. Click &quot;Populate VC Data&quot; to connect and enumerate the vSphere hosts located on this vCenter. Note: The user will need rights to browse, add/remove Hard Disks, and Create and Delete Virtual Machines in vCenter.</li> <li>Create a Backup VM: Click &quot;Create a Backup VM&quot;. You will be prompted to select a vSphere host and a Datastore on that host to place the Backup VM. The backup VM is a very small VM which will be used to attach AppStacks and Writable Volumes. The VM is never powered on-- it is simply used as a backup proxy.</li> <li>Once the Backup VM is created, you can choose which AppStacks and Writable Volumes you would like to back up, and attach them to the Backup VM.</li> <li>Select the Backup VM you would like to use by clicking the check box next to the name of the VM. Select each AppStack and Writable Volume that you would like to back up by selecting the check box next to the name of the AppStack or Writable Volume.</li> <li>Click &quot;Attach Selected AppStacks to Backup VM&quot;. This will attach the underlying VMDK files for each of the AppStacks and Writable Volumes to the Backup VM. You will see that each of the AppStacks and Writable Volumes you selected is now attached to the Backup VM.</li> <li>If you would like to remove any of the AppStacks or Writable Volumes that are attached to the Backup VM, simply select them by checking next to the name and selecting &quot;Detach Selected AppStacks from Backup VM&quot;.</li> <li>At this time, you can use a backup solution which is VMDK-aware to back up the AppStacks and Writable Volumes. Note: Multiple Backup VMs can be created and used.</li> </ol> <p>Configuring and Using the Backup Prep Utility:</p> <p>This utility is used in conjunction with a backup to make sure that Writable Volumes are not user-attached. If a Writable Volume is user-attached when it is attempted to be backed up, the snapshot process (and therefore the backup of the Writable Volume) will fail. This utility looks at all Writable Volumes connected to the Backup VM. It checks to see if they are user-attached at the time of back up. If the writable is user-attached, it is removed from the Backup VM and the name is written to a temporary XML file. Other Writable Volumes which are not user-attached are disabled for the duration of the back up. After the back up, the utility will review the XML file (if created) to see what Writable Volumes need to be re-attached to the Backup VM. It will re-attach the Writable Volumes that were user-attached, and re-enable all of the Writable Volumes.</p> <p>Usage: There are pre-backup.bat and post.backup.bat files located in the Backup Prep folder as part of this application download.</p> <ol> <li> <p>Place the Backup Prep Folder on the Backup Server</p> </li> <li> <p>Update the pre-backup.bat and post-backup.bat files with information on your environment. Example:</p> </li> </ol> <p>Pre-Backup: av_backup_prep.exe <a href="https://avmanager" rel="noopener" class=" external" target="_blank">https://avmanager</a> domain\user Password vCenter_Address Backup_VM_Name PRE Post-Backup: av_backup_prep.exe <a href="http://avmanager" rel="noopener" class=" external" target="_blank">http://avmanager</a> domain\user Password vCenter_Address Backup_VM_Name POST</p> <ol start="3"> <li>Call the batch files from the Backup Job to run before and after the Backup Job runs. (This utility was tested with Veeam Backup &amp; Replication 8.0).</li> </ol> <p>For more information on instructions, please see this article.</p> <p>Note: This tool backs up the vmdk portion of the App Volumes AppStack. Ideally, whenever possible, it is recommended to separately backup the metadata file of those AppStacks. After the restore operation, you should copy back the metadata file in the same location as the AppStacks. Restoring without the metadata information will still work but it will mark your AppStacks as Legacy. In the future, we plan to work on a version of the tool that will support adding the Metadata information as well.</p> </div><div class="sample-information"
+><p class="label">Contributor</p><p
+    >Chris Halstead</p
+><p class="label">Platform</p><p
+    >App Volumes</p
+><p class="label">Language</p><p
+    >Other Language</p
+><p class="label">License</p><p
+    >Apache 2.0</p
+><p class="label">Tags</p><p
+    >euc | App Volumes</p
+></div
+
+><div class="footer"
+><p>Copyright &copy; End User Computing Digital Workspace</p
+></div
+
+></body>

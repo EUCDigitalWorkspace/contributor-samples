@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="../../../code-sample.css" rel="stylesheet" />
+<title>Unprotect-InstantClone.ps1</title>
+
+</head>
+<body
+><!--
+Retrieved from https://code.vmware.com/samples/7456/Unprotect-InstantClone-ps1
+--><div class="header"
+><p><a href="../..">EUC Digital Workspace developer portal</a></p
+><p>/ <a href="../">Contributor Code Samples</a> /</p
+></div
+
+><h1>Unprotect-InstantClone.ps1</h1
+><p class="github-download"
+    ><a href="https://github.com/EUCDigitalWorkspace/contributor-sample_Unprotect-InstantClone.ps1">Download from GitHub</a>.</p
+><div class="section readme"> <div style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 254); font-family: Consolas, &quot;Courier New&quot;, monospace; line-height: 19px; white-space: pre;"> <div> <span style="color: #006400;font-style: italic;">&lt;#</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">NOTES</span> </div> <div> <span style="color: #006400;font-style: italic;">Author:&nbsp;Mark&nbsp;McGill,&nbsp;VMware</span> </div> <div> <span style="color: #006400;font-style: italic;">Last&nbsp;Edit:&nbsp;11-23-2020</span> </div> <div> <span style="color: #006400;font-style: italic;">Version&nbsp;1.1</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">SYNOPSIS</span> </div> <div> <span style="color: #006400;font-style: italic;">Unprotect&nbsp;Instant&nbsp;Clone&nbsp;VMs&nbsp;in&nbsp;order&nbsp;to&nbsp;delete&nbsp;those&nbsp;that&nbsp;are&nbsp;abandoned&nbsp;by&nbsp;Horizon</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">DESCRIPTION</span> </div> <div> <span style="color: #006400;font-style: italic;">Uses&nbsp;vCenter&nbsp;API&nbsp;to&nbsp;enable&nbsp;methods&nbsp;needed&nbsp;to&nbsp;unprotect&nbsp;Instant&nbsp;Clone&nbsp;VMs</span> </div> <div> <span style="color: #006400;font-style: italic;">Enabled&nbsp;methods&nbsp;match&nbsp;those&nbsp;enabled&nbsp;by&nbsp;the&nbsp;Horizon&nbsp;icCleanup&nbsp;tool&nbsp;to&nbsp;unprotect&nbsp;Instant&nbsp;Clones</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">EXAMPLE</span> </div> <div> <span style="color: #006400;font-style: italic;">#load&nbsp;function&nbsp;in&nbsp;order&nbsp;to&nbsp;call</span> </div> <div> <span style="color: #006400;font-style: italic;">.&nbsp;.\Unprotect-InstantClone.ps1</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">EXAMPLE</span> </div> <div> <span style="color: #006400;font-style: italic;">#Required&nbsp;parameters&nbsp;are&nbsp;vm&nbsp;and&nbsp;vCenter</span> </div> <div> <span style="color: #006400;font-style: italic;">Unprotect-InstantClone&nbsp;-vm&nbsp;&lt;vmName&gt;&nbsp;-vCenter&nbsp;&lt;vcenterFQDN&gt;</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">EXAMPLE</span> </div> <div> <span style="color: #006400;font-style: italic;">#Accepts&nbsp;pipeline&nbsp;input&nbsp;in&nbsp;the&nbsp;form&nbsp;of&nbsp;an&nbsp;array&nbsp;of&nbsp;VM&nbsp;Names,&nbsp;or&nbsp;VM&nbsp;Objects&nbsp;from&nbsp;Get-VM</span> </div> <div> <span style="color: #006400;font-style: italic;">$vms&nbsp;=&nbsp;Get-VM&nbsp;ic-Template*</span> </div> <div> <span style="color: #006400;font-style: italic;">$vms&nbsp;|&nbsp;Unprotect-InstantClone&nbsp;-vCenter&nbsp;&lt;vcenterFQDN&gt;&nbsp;-user&nbsp;administrator@vsphere.local</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">EXAMPLE</span> </div> <div> <span style="color: #006400;font-style: italic;">#Username&nbsp;and&nbsp;password&nbsp;can&nbsp;be&nbsp;passed&nbsp;as&nbsp;parameters&nbsp;as&nbsp;well&nbsp;as&nbsp;a&nbsp;Credential&nbsp;object.&nbsp;&nbsp;You&nbsp;will&nbsp;be&nbsp;prompted&nbsp;if&nbsp;none&nbsp;are&nbsp;provided</span> </div> <div> <span style="color: #006400;font-style: italic;">$credentials&nbsp;=&nbsp;Get-Credential</span> </div> <div> <span style="color: #006400;font-style: italic;">Unprotect-InstantClone&nbsp;-vm&nbsp;&lt;vmName&gt;&nbsp;-vCenter&nbsp;vCenter.corp.local&nbsp;-Credentials&nbsp;$credentials</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">EXAMPLE</span> </div> <div> <span style="color: #006400;font-style: italic;">#You&nbsp;will&nbsp;be&nbsp;prompted&nbsp;to&nbsp;confirm&nbsp;unprotecting&nbsp;VMs&nbsp;unless&nbsp;you&nbsp;pass&nbsp;the&nbsp;'-Confirm&nbsp;$false'&nbsp;parameter</span> </div> <div> <span style="color: #006400;font-style: italic;">Unprotect-InstantClone&nbsp;-vm&nbsp;&lt;vmName&gt;&nbsp;-vCenter&nbsp;&lt;vcenterFQDN&gt;&nbsp;-user&nbsp;administrator@vsphere.local&nbsp;-Confirm&nbsp;$false</span> </div> <div> <span style="color: #800080;font-style: italic;">.</span> <span style="color: #a9a9a9;font-style: italic;">EXAMPLE</span> </div> <div> <span style="color: #006400;font-style: italic;">#Use&nbsp;the&nbsp;'-Verbose'&nbsp;option&nbsp;to&nbsp;show&nbsp;additional&nbsp;output&nbsp;during&nbsp;processing</span> </div> <div> <span style="color: #006400;font-style: italic;">Unprotect-InstantClone&nbsp;-VM&nbsp;&lt;vmName&gt;&nbsp;-vCenter&nbsp;&lt;vcenterFQDN&gt;&nbsp;&nbsp;-Verbose</span> </div> <div> <span style="color: #006400;font-style: italic;">#&gt;</span> </div> </div> </div><div class="sample-information"
+><p class="label">Contributor</p><p
+    >Mark McGill</p
+><p class="label">Platform</p><p
+    >Horizon</p
+><p class="label">Language</p><p
+    >PowerShell</p
+><p class="label">License</p><p
+    >Apache 2.0</p
+><p class="label">Tags</p><p
+    >Horizon | powershell | VMware Horizon | vCenter API | PowerCLI</p
+></div
+
+><div class="footer"
+><p>Copyright &copy; End User Computing Digital Workspace</p
+></div
+
+></body>
